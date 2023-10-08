@@ -1,6 +1,4 @@
-import 'package:dio_handler/src/image_path.dart';
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+part of dio_handler;
 
 void showLoadingDialog(BuildContext context) {
   Future.delayed(const Duration(milliseconds: 0), () {
@@ -15,9 +13,7 @@ void showLoadingDialog(BuildContext context) {
                 height: 100,
                 width: 100,
                 padding: const EdgeInsets.all(8),
-                child: Center(
-                    child: Lottie.asset(ImagePath.loadingLottie,
-                        height: 70, width: 70)),
+                child: const CircularProgressIndicator(),
               ),
             ),
           );
