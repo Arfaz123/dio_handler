@@ -1,7 +1,7 @@
 part of dio_handler;
 
 
-Future<bool> checkInternet() async {
+Future<bool> isInternetAvailable() async {
   var connectivityResult = await (Connectivity().checkConnectivity());
   if (connectivityResult == ConnectivityResult.mobile) {
     return true;
