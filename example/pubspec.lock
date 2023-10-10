@@ -82,7 +82,7 @@ packages:
     source: hosted
     version: "0.7.8"
   dio:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: dio
       sha256: "417e2a6f9d83ab396ec38ff4ea5da6c254da71e4db765ad737a42af6930140b7"
@@ -95,7 +95,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1-beta-1"
+    version: "0.0.1-beta-2"
   fake_async:
     dependency: transitive
     description:

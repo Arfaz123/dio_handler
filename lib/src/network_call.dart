@@ -1,242 +1,121 @@
 part of dio_handler;
 
+/// `DioHandler` is a class designed to simplify network API calls in Flutter applications using the Dio HTTP client.
+///
+/// It provides various utility functions and customization options to streamline the process of making API requests.
 
 class DioHandler {
   final Dio dio;
-  final String baseUrl;
-  final Map<String, dynamic>? defaultHeaders;
+  final Widget? customErrorDialog; // Custom error dialog widget (optional)
+  final Widget? customLoadingDialog; // Custom loading dialog widget (optional)
+  final bool isCheckNetworkConnectivity; // Enable network connectivity check
+  final bool isAlertDialogs; // Show alert dialogs for errors
+  final bool isCallBackTime; // Measure API callback time
 
+  /// Creates an instance of `DioHandler` with the provided configuration.
+  ///
+  /// - [dio]: An instance of Dio for making HTTP requests.
+  /// - [customErrorDialog]: An optional custom error dialog widget to display error messages.
+  /// - [customLoadingDialog]: An optional custom loading dialog widget to show during API calls.
+  /// - [isCheckNetworkConnectivity]: Set to `true` to enable network connectivity checks before making requests.
+  /// - [isAlertDialogs]: Set to `true` to display alert dialogs for API errors.
+  /// - [isCallBackTime]: Set to `true` to measure and print the time taken for API callbacks (debug mode).
   DioHandler({
-    required this.baseUrl,
-    this.defaultHeaders,
-  }) : dio = Dio(BaseOptions(
-    baseUrl: baseUrl,
-    connectTimeout: const Duration(milliseconds: 30000),
-    receiveTimeout: const Duration(milliseconds: 30000),
-  )) {
-    if (defaultHeaders != null) {
-      dio.options.headers.addAll(defaultHeaders!);
-    }
-  }
+    required this.dio,
+    this.customErrorDialog,
+    this.customLoadingDialog,
+    this.isCheckNetworkConnectivity = false,
+    this.isAlertDialogs = true,
+    this.isCallBackTime = false,
+  });
 
-  Future<Response> get<T>(
-      String path, {
-        Map<String, dynamic>? params,
-        Map<String, dynamic>? headers,
-      }) async {
-    if (!await isInternetAvailable()) {
-      throw DioError(
-        error: "No internet connection",
-      );
+  /// Makes an HTTP API request using Dio and handles the response and errors.
+  ///
+  /// - [params]: Query parameters for the request (GET request).
+  /// - [headers]: Headers for the request.
+  /// - [body]: Request body data for POST or PUT requests.
+  /// - [serviceUrl]: The URL of the API endpoint.
+  /// - [method]: The HTTP request method (GET, POST, PUT, DELETE).
+  /// - [formData]: Optional FormData for multipart requests (e.g., file uploads).
+  /// - [success]: A callback function to handle a successful API response.
+  /// - [error]: A callback function to handle API errors.
+  /// - [showProcess]: Set to `true` to display a loading dialog during the API call.
+  Future<void> callAPI({
+    Map<String, dynamic>? params,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? body,
+    required String serviceUrl,
+    required String method,
+    FormData? formData,
+    required Function(Response) success,
+    required Function(dynamic) error,
+    required bool showProcess,
+  }) async {
+    // Check network connectivity if enabled
+    if (isCheckNetworkConnectivity && !(await isInternetAvailable())) {
+      if (isAlertDialogs) {
+        // Display an error dialog for no internet connection
+        apiAlertDialog(message: 'No internet connection', customErrorDialog: customErrorDialog);
+      }
+      return;
     }
 
     try {
-      final response = await dio.get(
-        path,
-        queryParameters: params,
-        options: Options(headers: headers),
-      );
+      Response response;
+      final options = Options(headers: headers);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
+      if (showProcess) {
+        // Show loading dialog when 'showProcess' is true
+        showLoadingDialog(customLoadingDialog: customLoadingDialog);
+      }
+
+      final stopwatch = Stopwatch()..start(); // Start a timer if 'isCallBackTime' is true
+
+      // Make the appropriate HTTP request based on the 'method'
+      switch (method) {
+        case 'GET':
+          response = await dio.get(serviceUrl, queryParameters: params, options: options);
+          break;
+        case 'POST':
+          response = await dio.post(serviceUrl, data: body ?? formData, options: options);
+          break;
+        case 'PUT':
+          response = await dio.put(serviceUrl, data: body ?? formData, options: options);
+          break;
+        case 'DELETE':
+          response = await dio.delete(serviceUrl, data: body ?? formData, options: options);
+          break;
+        default:
+          throw ArgumentError('Invalid method: $method');
+      }
+
+      if (isCallBackTime) {
+        // Stop the timer and print the API request time if 'isCallBackTime' is true
+        stopwatch.stop();
+        kDebugPrint('API request took ${stopwatch.elapsedMilliseconds} milliseconds');
+      }
+
+      if (response.statusCode! >= 400) {
+        // Handle errors, including HTTP status codes 400 and above
+        error(response);
       } else {
-        throw DioError(
-          response: response,
-          error: "HTTP Error ${response.statusCode}",
-        );
+        // Pass other responses as-is
+        success(response);
       }
     } catch (e) {
-      throw DioError(
-        error: "Network Error: ${e.toString()}",
-      );
-    }
-  }
-
-  Future<Response> post<T>(
-      String path, {
-        Map<String, dynamic>? params,
-        Map<String, dynamic>? headers,
-        dynamic data,
-      }) async {
-    if (!await isInternetAvailable()) {
-      throw DioError(
-        error: "No internet connection",
-      );
-    }
-
-    try {
-      final response = await dio.post(
-        path,
-        queryParameters: params,
-        options: Options(headers: headers),
-        data: data,
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
-      } else {
-        throw DioError(
-          response: response,
-          error: "HTTP Error ${response.statusCode}",
-        );
+      if (isAlertDialogs) {
+        // Display an error dialog for exceptions
+        apiAlertDialog(message: 'An error occurred: $e', customErrorDialog: customErrorDialog);
       }
-    } catch (e) {
-      throw DioError(
-        error: "Network Error: ${e.toString()}",
-      );
-    }
-  }
-
-  Future<Response> put<T>(
-      String path, {
-        Map<String, dynamic>? params,
-        Map<String, dynamic>? headers,
-        dynamic data,
-      }) async {
-    if (!await isInternetAvailable()) {
-      throw DioError(
-        error: "No internet connection",
-      );
-    }
-
-    try {
-      final response = await dio.put(
-        path,
-        queryParameters: params,
-        options: Options(headers: headers),
-        data: data,
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
-      } else {
-        throw DioError(
-          response: response,
-          error: "HTTP Error ${response.statusCode}",
-        );
+      error(e);
+    } finally {
+      if (showProcess) {
+        // Hide the loading dialog when 'showProcess' is true
+        hideLoadingDialog();
       }
-    } catch (e) {
-      throw DioError(
-        error: "Network Error: ${e.toString()}",
-      );
     }
-  }
-
-  Future<Response> delete<T>(
-      String path, {
-        Map<String, dynamic>? params,
-        Map<String, dynamic>? headers,
-        dynamic data,
-      }) async {
-    if (!await isInternetAvailable()) {
-      throw DioError(
-        error: "No internet connection",
-      );
-    }
-
-    try {
-      final response = await dio.delete(
-        path,
-        queryParameters: params,
-        options: Options(headers: headers),
-        data: data,
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
-      } else {
-        throw DioError(
-          response: response,
-          error: "HTTP Error ${response.statusCode}",
-        );
-      }
-    } catch (e) {
-      throw DioError(
-        error: "Network Error: ${e.toString()}",
-      );
-    }
-  }
-
-  Future<Response<T>> postFormData<T>(
-      String path, {
-        Map<String, dynamic>? params,
-        Map<String, dynamic>? headers,
-        FormData? formData,
-      }) async {
-    if (!await isInternetAvailable()) {
-      throw DioError(
-        error: "No internet connection",
-      );
-    }
-
-    try {
-      final response = await dio.post(
-        path,
-        queryParameters: params,
-        options: Options(headers: headers),
-        data: formData,
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
-      } else {
-        throw DioError(
-          response: response,
-          error: "HTTP Error ${response.statusCode}",
-        );
-      }
-    } catch (e) {
-      throw DioError(
-        error: "Network Error: ${e.toString()}",
-      );
-    }
-  }
-
-  Future<Response<T>> putFormData<T>(
-      String path, {
-        Map<String, dynamic>? params,
-        Map<String, dynamic>? headers,
-        FormData? formData,
-      }) async {
-    if (!await isInternetAvailable()) {
-      throw DioError(
-        error: "No internet connection",
-      );
-    }
-
-    try {
-      final response = await dio.put(
-        path,
-        queryParameters: params,
-        options: Options(headers: headers),
-        data: formData,
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
-      } else {
-        throw DioError(
-          response: response,
-          error: "HTTP Error ${response.statusCode}",
-        );
-      }
-    } catch (e) {
-      throw DioError(
-        error: "Network Error: ${e.toString()}",
-      );
-    }
-  }
-
-  // Additional customizations:
-  void addDefaultHeader(String key, dynamic value) {
-    dio.options.headers[key] = value;
-  }
-
-  void setConnectTimeout(Duration duration) {
-    dio.options.connectTimeout = duration;
-  }
-
-  void setReceiveTimeout(Duration duration) {
-    dio.options.receiveTimeout = duration;
   }
 }
+
+// A global key to access the current navigation context
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
