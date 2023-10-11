@@ -14,4 +14,3 @@ export 'package:flutter/material.dart';
 part 'src/network_connectivity.dart';
 part 'src/custom_dialog.dart';
 part 'src/network_call.dart';
-

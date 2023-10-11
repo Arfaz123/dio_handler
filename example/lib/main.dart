@@ -11,9 +11,12 @@ class MyApp extends StatelessWidget {
 
   final DioHandler dioHandler = DioHandler(
     dio: Dio(), // Pass the Dio instance to DioHandler
-    customErrorDialog: const MyCustomErrorDialog(), // Optional: Provide a custom error dialog widget
-    customLoadingDialog: const MyCustomLoadingDialog(), // Optional: Provide a custom loading dialog widget
-    isCheckNetworkConnectivity: true, // Optional: Enable network connectivity check
+    customErrorDialog:
+        const MyCustomErrorDialog(), // Optional: Provide a custom error dialog widget
+    customLoadingDialog:
+        const MyCustomLoadingDialog(), // Optional: Provide a custom loading dialog widget
+    isCheckNetworkConnectivity:
+        true, // Optional: Enable network connectivity check
     isAlertDialogs: true, // Optional: Show alert dialogs for errors
     isCallBackTime: true, // Optional: Measure API callback time
   );

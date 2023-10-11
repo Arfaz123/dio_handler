@@ -1,6 +1,6 @@
 name: dio_handler
-description: DioHandler is a Flutter package designed to simplify network API calls using the Dio HTTP client. It provides utility functions and customization options to streamline API request handling in your Flutter applications.
-version: 0.0.1-beta-3
+description: DioHandler provides utility functions and customization options to streamline API request handling in your Flutter applications.
+version: 0.0.1-beta-6
 homepage: https://arfaz.tech
 repository: https://github.com/Arfaz123/dio_handler.git
 

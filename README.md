@@ -26,7 +26,6 @@ DioHandler is a Flutter package designed to simplify network API calls using the
   - [Import](#import-the-package)
   - [Create an Instance](#create-a-diohandler-instance)
   - [Make API Requests](#make-api-requests)
-  - [Load Previously Generated Images](#load-a-previously-generated-image)
 - [Example](#example)
 - [Contributing](#contributing)
 - [License](#license)
@@ -39,7 +38,7 @@ To use DioHandler in your Flutter project, add it as a dependency in your `pubsp
 
 ```yaml
 dependencies:
-  dio_handler:  <latest_version>
+  dio_handler: <latest_version>
 ```
 
 Then, run `flutter pub get` to install the package.
@@ -97,19 +96,6 @@ dioHandler.callAPI(
 );
 ```
 
-### Load a Previously Generated Image
-
-You can use the `loadLastImage()` method to load a previously generated image:
-
-```dart
-File? imageFile = await dioHandler.loadLastImage();
-if (imageFile != null) {
-  // Display or process the loaded image
-}
-```
-
-This can be useful for scenarios where you want to work with previously generated images.
-
 ---
 
 ## Example
@@ -127,7 +113,7 @@ You can find an example of how to use DioHandler in the `example` folder of this
 If you have any questions, feel free to reach out:
 
 - Email: chhapawalaarfaz@gmail.com
-- GitHub: https://github.com/Arfaz123
+- GitHub: [@Arfaz123](https://github.com/Arfaz123)
 
 ---
 

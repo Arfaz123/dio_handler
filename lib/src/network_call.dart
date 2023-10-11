@@ -55,7 +55,9 @@ class DioHandler {
     if (isCheckNetworkConnectivity && !(await isInternetAvailable())) {
       if (isAlertDialogs) {
         // Display an error dialog for no internet connection
-        apiAlertDialog(message: 'No internet connection', customErrorDialog: customErrorDialog);
+        apiAlertDialog(
+            message: 'No internet connection',
+            customErrorDialog: customErrorDialog);
       }
       return;
     }
@@ -69,21 +71,26 @@ class DioHandler {
         showLoadingDialog(customLoadingDialog: customLoadingDialog);
       }
 
-      final stopwatch = Stopwatch()..start(); // Start a timer if 'isCallBackTime' is true
+      final stopwatch = Stopwatch()
+        ..start(); // Start a timer if 'isCallBackTime' is true
 
       // Make the appropriate HTTP request based on the 'method'
       switch (method) {
         case 'GET':
-          response = await dio.get(serviceUrl, queryParameters: params, options: options);
+          response = await dio.get(serviceUrl,
+              queryParameters: params, options: options);
           break;
         case 'POST':
-          response = await dio.post(serviceUrl, data: body ?? formData, options: options);
+          response = await dio.post(serviceUrl,
+              data: body ?? formData, options: options);
           break;
         case 'PUT':
-          response = await dio.put(serviceUrl, data: body ?? formData, options: options);
+          response = await dio.put(serviceUrl,
+              data: body ?? formData, options: options);
           break;
         case 'DELETE':
-          response = await dio.delete(serviceUrl, data: body ?? formData, options: options);
+          response = await dio.delete(serviceUrl,
+              data: body ?? formData, options: options);
           break;
         default:
           throw ArgumentError('Invalid method: $method');
@@ -92,7 +99,8 @@ class DioHandler {
       if (isCallBackTime) {
         // Stop the timer and print the API request time if 'isCallBackTime' is true
         stopwatch.stop();
-        kDebugPrint('API request took ${stopwatch.elapsedMilliseconds} milliseconds');
+        kDebugPrint(
+            'API request took ${stopwatch.elapsedMilliseconds} milliseconds');
       }
 
       if (response.statusCode! >= 400) {
@@ -105,7 +113,9 @@ class DioHandler {
     } catch (e) {
       if (isAlertDialogs) {
         // Display an error dialog for exceptions
-        apiAlertDialog(message: 'An error occurred: $e', customErrorDialog: customErrorDialog);
+        apiAlertDialog(
+            message: 'An error occurred: $e',
+            customErrorDialog: customErrorDialog);
       }
       error(e);
     } finally {
