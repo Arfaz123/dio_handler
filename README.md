@@ -1,4 +1,4 @@
-```markdown
+
 # DioHandler
 
 ![Pub Version](https://img.shields.io/pub/v/dio_handler)
@@ -150,4 +150,3 @@ This package is released under the MIT License. See the [LICENSE](LICENSE) file 
 ---
 
 Feel free to explore the features of the DioHandler package and customize it to suit your needs. If you have any questions or feedback, don't hesitate to reach out. Happy coding!
-```
