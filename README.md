@@ -1,5 +1,3 @@
-Here's a README.md file for your DioHandler package based on your provided README example:
-
 ```markdown
 # DioHandler
 
@@ -41,7 +39,7 @@ To use DioHandler in your Flutter project, add it as a dependency in your `pubsp
 
 ```yaml
 dependencies:
-  dio_handler: ^1.0.0 # Replace with the latest version
+  dio_handler:  <latest_version>
 ```
 
 Then, run `flutter pub get` to install the package.

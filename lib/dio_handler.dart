@@ -3,7 +3,6 @@ library dio_handler;
 
 // Import necessary Dart libraries
 import 'package:dio/dio.dart';
-import 'package:dio_handler/dio_handler.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
