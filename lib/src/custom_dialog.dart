@@ -11,10 +11,11 @@ part of dio_handler;
 /// showLoadingDialog();
 /// // API request is in progress, and the loading dialog is displayed
 /// ```
-void showLoadingDialog({final Widget? customLoadingDialog}) {
+void showLoadingDialog(
+    {final Widget? customLoadingDialog, required BuildContext buildContext}) {
   Future.delayed(const Duration(milliseconds: 0), () {
     showDialog(
-        context: navigatorKey.currentContext!,
+        context: buildContext,
         barrierDismissible: false,
         builder: (context) {
           if (customLoadingDialog != null) {
@@ -25,8 +26,8 @@ void showLoadingDialog({final Widget? customLoadingDialog}) {
               child: Material(
                 color: Colors.transparent,
                 child: Container(
-                  height: 100,
-                  width: 100,
+                  height: 50,
+                  width: 50,
                   padding: const EdgeInsets.all(8),
                   child: const CircularProgressIndicator(),
                 ),
@@ -50,11 +51,12 @@ void showLoadingDialog({final Widget? customLoadingDialog}) {
 /// ```
 void apiAlertDialog({
   required String message,
+  required BuildContext buildContext,
   final Widget? customErrorDialog,
 }) {
   showDialog(
     barrierDismissible: false,
-    context: navigatorKey.currentContext!,
+    context: buildContext,
     builder: (context) {
       if (customErrorDialog != null) {
         // Use the custom error dialog widget if provided
@@ -87,8 +89,8 @@ void apiAlertDialog({
 /// hideLoadingDialog();
 /// // Hides the loading dialog if it is currently displayed
 /// ```
-void hideLoadingDialog() {
-  Navigator.of(navigatorKey.currentContext!).pop();
+void hideLoadingDialog({required BuildContext buildContext}) {
+  Navigator.of(buildContext).pop();
 }
 
 /// The `kDebugPrint` function prints debugging information if running in debug mode.

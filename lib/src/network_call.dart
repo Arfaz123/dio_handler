@@ -1,45 +1,24 @@
 part of dio_handler;
 
-/// `DioHandler` is a class designed to simplify network API calls in Flutter applications using the Dio HTTP client.
-///
-/// It provides various utility functions and customization options to streamline the process of making API requests.
-
 class DioHandler {
   final Dio dio;
-  final Widget? customErrorDialog; // Custom error dialog widget (optional)
-  final Widget? customLoadingDialog; // Custom loading dialog widget (optional)
-  final bool isCheckNetworkConnectivity; // Enable network connectivity check
-  final bool isAlertDialogs; // Show alert dialogs for errors
-  final bool isCallBackTime; // Measure API callback time
+  final Widget? customErrorDialog;
+  final Widget? customLoadingDialog;
+  final bool isCheckNetworkConnectivity;
+  final bool isAlertDialogs;
+  final bool isCallBackTime;
+  final BuildContext Function() getBuildContext; // Callback to get BuildContext
 
-  /// Creates an instance of `DioHandler` with the provided configuration.
-  ///
-  /// - [dio]: An instance of Dio for making HTTP requests.
-  /// - [customErrorDialog]: An optional custom error dialog widget to display error messages.
-  /// - [customLoadingDialog]: An optional custom loading dialog widget to show during API calls.
-  /// - [isCheckNetworkConnectivity]: Set to `true` to enable network connectivity checks before making requests.
-  /// - [isAlertDialogs]: Set to `true` to display alert dialogs for API errors.
-  /// - [isCallBackTime]: Set to `true` to measure and print the time taken for API callbacks (debug mode).
   DioHandler({
     required this.dio,
     this.customErrorDialog,
     this.customLoadingDialog,
+    required this.getBuildContext, // Pass a callback to get BuildContext
     this.isCheckNetworkConnectivity = false,
     this.isAlertDialogs = true,
     this.isCallBackTime = false,
   });
 
-  /// Makes an HTTP API request using Dio and handles the response and errors.
-  ///
-  /// - [params]: Query parameters for the request (GET request).
-  /// - [headers]: Headers for the request.
-  /// - [body]: Request body data for POST or PUT requests.
-  /// - [serviceUrl]: The URL of the API endpoint.
-  /// - [method]: The HTTP request method (GET, POST, PUT, DELETE).
-  /// - [formData]: Optional FormData for multipart requests (e.g., file uploads).
-  /// - [success]: A callback function to handle a successful API response.
-  /// - [error]: A callback function to handle API errors.
-  /// - [showProcess]: Set to `true` to display a loading dialog during the API call.
   Future<void> callAPI({
     Map<String, dynamic>? params,
     Map<String, dynamic>? headers,
@@ -56,8 +35,10 @@ class DioHandler {
       if (isAlertDialogs) {
         // Display an error dialog for no internet connection
         apiAlertDialog(
-            message: 'No internet connection',
-            customErrorDialog: customErrorDialog);
+          message: 'No internet connection',
+          customErrorDialog: customErrorDialog,
+          buildContext: getBuildContext(), // Get BuildContext via callback
+        );
       }
       return;
     }
@@ -68,7 +49,10 @@ class DioHandler {
 
       if (showProcess) {
         // Show loading dialog when 'showProcess' is true
-        showLoadingDialog(customLoadingDialog: customLoadingDialog);
+        showLoadingDialog(
+          customLoadingDialog: customLoadingDialog,
+          buildContext: getBuildContext(), // Get BuildContext via callback
+        );
       }
 
       final stopwatch = Stopwatch()
@@ -114,18 +98,21 @@ class DioHandler {
       if (isAlertDialogs) {
         // Display an error dialog for exceptions
         apiAlertDialog(
-            message: 'An error occurred: $e',
-            customErrorDialog: customErrorDialog);
+          message: 'An error occurred: $e',
+          customErrorDialog: customErrorDialog,
+          buildContext: getBuildContext(), // Get BuildContext via callback
+        );
       }
       error(e);
+      // Hide the loading dialog when 'showProcess' is true
+      hideLoadingDialog(
+          buildContext: getBuildContext()); // Get BuildContext via callback
     } finally {
       if (showProcess) {
         // Hide the loading dialog when 'showProcess' is true
-        hideLoadingDialog();
+        hideLoadingDialog(
+            buildContext: getBuildContext()); // Get BuildContext via callback
       }
     }
   }
 }
-
-// A global key to access the current navigation context
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
