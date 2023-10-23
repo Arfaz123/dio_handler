@@ -11,17 +11,17 @@ part of dio_handler;
 /// showLoadingDialog();
 /// // API request is in progress, and the loading dialog is displayed
 /// ```
-void showLoadingDialog(
-    {final Widget? customLoadingDialog, required BuildContext buildContext}) {
-  Future.delayed(const Duration(milliseconds: 0), () {
-    showDialog(
-        context: buildContext,
-        barrierDismissible: false,
-        builder: (context) {
-          if (customLoadingDialog != null) {
-            // Use the custom loading dialog widget if provided
-            return customLoadingDialog;
-          } else {
+dynamic showLoadingDialog(
+    {final dynamic? customLoadingDialog, required buildContext}) {
+  if (customLoadingDialog != null) {
+    // Use the custom loading dialog widget if provided
+    return customLoadingDialog;
+  } else {
+    return Future.delayed(const Duration(milliseconds: 0), () {
+      showDialog(
+          barrierDismissible: false,
+          context: buildContext,
+          builder: (context) {
             return Center(
               child: Material(
                 color: Colors.transparent,
@@ -33,9 +33,9 @@ void showLoadingDialog(
                 ),
               ),
             );
-          }
-        });
-  });
+          });
+    });
+  }
 }
 
 /// The `apiAlertDialog` function displays an alert dialog for API errors.
@@ -49,34 +49,31 @@ void showLoadingDialog(
 /// apiAlertDialog(message: 'An error occurred');
 /// // Displays an alert dialog with the error message
 /// ```
-void apiAlertDialog({
+dynamic apiAlertDialog({
   required String message,
-  required BuildContext buildContext,
-  final Widget? customErrorDialog,
+  required buildContext,
+  final dynamic? customErrorDialog,
 }) {
-  showDialog(
-    barrierDismissible: false,
-    context: buildContext,
-    builder: (context) {
-      if (customErrorDialog != null) {
-        // Use the custom error dialog widget if provided
-        return customErrorDialog;
-      } else {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      }
-    },
-  );
+  if (customErrorDialog != null) {
+    return customErrorDialog;
+  } else {
+    return showDialog(
+        barrierDismissible: false,
+        context: buildContext,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        });
+  }
 }
 
 /// The `hideLoadingDialog` function hides the loading dialog.
@@ -89,7 +86,7 @@ void apiAlertDialog({
 /// hideLoadingDialog();
 /// // Hides the loading dialog if it is currently displayed
 /// ```
-void hideLoadingDialog({required BuildContext buildContext}) {
+void hideLoadingDialog({required buildContext}) {
   Navigator.of(buildContext).pop();
 }
 

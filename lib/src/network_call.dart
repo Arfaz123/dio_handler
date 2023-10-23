@@ -2,8 +2,8 @@ part of dio_handler;
 
 class DioHandler {
   final Dio dio;
-  final Widget? customErrorDialog;
-  final Widget? customLoadingDialog;
+  final dynamic customErrorDialog;
+  final dynamic customLoadingDialog;
   final bool isCheckNetworkConnectivity;
   final bool isAlertDialogs;
   final bool isCallBackTime;
@@ -28,12 +28,14 @@ class DioHandler {
     FormData? formData,
     required Function(Response) success,
     required Function(dynamic) error,
-    required bool showProcess,
+    bool showProcess = false,
   }) async {
     // Check network connectivity if enabled
     if (isCheckNetworkConnectivity && !(await isInternetAvailable())) {
-      if (isAlertDialogs) {
+      kDebugPrint("is error---------------1 $isCheckNetworkConnectivity");
+      if (isAlertDialogs == true) {
         // Display an error dialog for no internet connection
+        kDebugPrint("error---------------1");
         apiAlertDialog(
           message: 'No internet connection',
           customErrorDialog: customErrorDialog,
@@ -47,7 +49,7 @@ class DioHandler {
       Response response;
       final options = Options(headers: headers);
 
-      if (showProcess) {
+      if (showProcess == true) {
         // Show loading dialog when 'showProcess' is true
         showLoadingDialog(
           customLoadingDialog: customLoadingDialog,
@@ -95,8 +97,16 @@ class DioHandler {
         success(response);
       }
     } catch (e) {
-      if (isAlertDialogs) {
+      kDebugPrint("is error---------------2 $customErrorDialog");
+      // Hide the loading dialog when 'showProcess' is true
+      if (showProcess == true) {
+        hideLoadingDialog(
+            buildContext: getBuildContext()); // Get BuildContext via callback
+      }
+      if (isAlertDialogs == true) {
         // Display an error dialog for exceptions
+        kDebugPrint("error---------------2");
+
         apiAlertDialog(
           message: 'An error occurred: $e',
           customErrorDialog: customErrorDialog,
@@ -104,11 +114,8 @@ class DioHandler {
         );
       }
       error(e);
-      // Hide the loading dialog when 'showProcess' is true
-      hideLoadingDialog(
-          buildContext: getBuildContext()); // Get BuildContext via callback
     } finally {
-      if (showProcess) {
+      if (showProcess == true) {
         // Hide the loading dialog when 'showProcess' is true
         hideLoadingDialog(
             buildContext: getBuildContext()); // Get BuildContext via callback

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dio_handler/dio_handler.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(MaterialApp(home: MyApp()));
@@ -55,14 +56,18 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  void makeGetApiRequest(context) {
+  void makeGetApiRequest(BuildContext context) {
     final dioHandler = DioHandler(
-        dio: dio,
-        getBuildContext: () => context,
-        isCheckNetworkConnectivity: true);
+      dio: dio,
+      getBuildContext: () => context,
+      isCheckNetworkConnectivity: true,
+      isAlertDialogs: false,
+      customLoadingDialog:
+          customLoadingDialog(loadingText: "Loading...", context: context),
+    );
 
     dioHandler.callAPI(
-      serviceUrl: 'https://jsonplaceholder.typicode.com/posts/0',
+      serviceUrl: 'https://jsonplaceholder.typicode.com/posts/1',
       method: 'GET',
       success: (response) {
         // Handle a successful response here
@@ -72,18 +77,18 @@ class MyApp extends StatelessWidget {
         // Handle errors or exceptions here
         kDebugPrint('Error: $error');
       },
-      showProcess: true, // Show a loading dialog
+      showProcess: false, // Show a loading dialog
     );
   }
 
-  void makePostApiRequest(context) {
+  void makePostApiRequest(BuildContext context) {
     final dioHandler = DioHandler(
         dio: dio,
         getBuildContext: () => context,
         isCheckNetworkConnectivity: true,
-        isAlertDialogs: true,
+        isAlertDialogs: false,
         customErrorDialog: customAlertDialog(
-            alertText: "There is Some Error occurred.", context: context));
+            alertText: "This Is A Customer Alert Dialog.", context: context));
 
     // Example POST request data
     final Map<String, dynamic> postData = {
@@ -105,11 +110,11 @@ class MyApp extends StatelessWidget {
         // Handle errors or exceptions here
         kDebugPrint('Error: $error');
       },
-      showProcess: true, // Show a loading dialog
+      showProcess: false, // Show a loading dialog
     );
   }
 
-  customAlertDialog({required String alertText, context}) {
+  customAlertDialog({required String alertText,required BuildContext context}) {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -141,6 +146,34 @@ class MyApp extends StatelessWidget {
             ),
           );
         });
+  }
+
+  customLoadingDialog({required String loadingText,required BuildContext context}) {
+    return Future.delayed(const Duration(milliseconds: 100), () {
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) {
+            return Center(
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  color: Colors.white,
+                  height: 100,
+                  width: 100,
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      const CircularProgressIndicator(),
+                      Text(loadingText),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+    });
   }
 }
 
