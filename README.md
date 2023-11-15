@@ -15,7 +15,7 @@ DioHandler is a Flutter package designed to simplify network API calls using the
 - Simplified API calls with Dio.
 - Customizable error and loading dialogs.
 - Network connectivity check.
-- Callback time measurement (in debug mode).
+- Callback time measurement.
 
 ---
 
@@ -60,10 +60,7 @@ import 'package:dio_handler/dio_handler.dart';
 Create an instance of `DioHandler` by providing a Dio instance and other optional parameters:
 
 ```dart
-final Dio dio = Dio(); // Initialize a Dio instance
-
 final DioHandler dioHandler = DioHandler(
-  dio: dio, // Pass the Dio instance to DioHandler
   customErrorDialog: MyCustomErrorDialog(), // Optional: Provide a custom error dialog widget
   customLoadingDialog: MyCustomLoadingDialog(), // Optional: Provide a custom loading dialog widget
   isCheckNetworkConnectivity: true, // Optional: Enable network connectivity check
@@ -114,6 +111,7 @@ If you have any questions, feel free to reach out:
 
 - Email: chhapawalaarfaz@gmail.com
 - GitHub: [@Arfaz123](https://github.com/Arfaz123)
+- YouTube: [@devfaaz](https://www.youtube.com/@devfaaz)
 
 ---
 
