@@ -12,10 +12,15 @@ part of dio_handler;
 /// // API request is in progress, and the loading dialog is displayed
 /// ```
 dynamic showLoadingDialog(
-    {final dynamic? customLoadingDialog, required buildContext}) {
+    {final dynamic customLoadingDialog, required buildContext}) {
   if (customLoadingDialog != null) {
     // Use the custom loading dialog widget if provided
-    return customLoadingDialog;
+    return showDialog(
+        barrierDismissible: false,
+        context: buildContext,
+        builder: (context) {
+          return customLoadingDialog;
+        });
   } else {
     return Future.delayed(const Duration(milliseconds: 0), () {
       showDialog(
@@ -52,10 +57,15 @@ dynamic showLoadingDialog(
 dynamic apiAlertDialog({
   required String message,
   required buildContext,
-  final dynamic? customErrorDialog,
+  final dynamic customErrorDialog,
 }) {
   if (customErrorDialog != null) {
-    return customErrorDialog;
+    return showDialog(
+        barrierDismissible: false,
+        context: buildContext,
+        builder: (context) {
+          return customErrorDialog;
+        });
   } else {
     return showDialog(
         barrierDismissible: false,
@@ -87,7 +97,9 @@ dynamic apiAlertDialog({
 /// // Hides the loading dialog if it is currently displayed
 /// ```
 void hideLoadingDialog({required buildContext}) {
-  Navigator.of(buildContext).pop();
+  if (Navigator.of(buildContext).canPop()) {
+    Navigator.of(buildContext).pop();
+  }
 }
 
 /// The `kDebugPrint` function prints debugging information if running in debug mode.

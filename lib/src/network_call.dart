@@ -1,16 +1,14 @@
 part of dio_handler;
 
 class DioHandler {
-  final Dio dio;
   final dynamic customErrorDialog;
   final dynamic customLoadingDialog;
   final bool isCheckNetworkConnectivity;
   final bool isAlertDialogs;
   final bool isCallBackTime;
-  final BuildContext Function() getBuildContext; // Callback to get BuildContext
+  final BuildContext getBuildContext; // Callback to get BuildContext
 
   DioHandler({
-    required this.dio,
     this.customErrorDialog,
     this.customLoadingDialog,
     required this.getBuildContext, // Pass a callback to get BuildContext
@@ -33,27 +31,28 @@ class DioHandler {
     // Check network connectivity if enabled
     if (isCheckNetworkConnectivity && !(await isInternetAvailable())) {
       kDebugPrint("is error---------------1 $isCheckNetworkConnectivity");
-      if (isAlertDialogs == true) {
+      if (isAlertDialogs) {
         // Display an error dialog for no internet connection
         kDebugPrint("error---------------1");
+        if (!getBuildContext.mounted) return;
         apiAlertDialog(
           message: 'No internet connection',
           customErrorDialog: customErrorDialog,
-          buildContext: getBuildContext(), // Get BuildContext via callback
+          buildContext: getBuildContext, // Get BuildContext via callback
         );
       }
-      return;
     }
 
     try {
       Response response;
       final options = Options(headers: headers);
 
-      if (showProcess == true) {
+      if (showProcess) {
         // Show loading dialog when 'showProcess' is true
+        if (!getBuildContext.mounted) return;
         showLoadingDialog(
           customLoadingDialog: customLoadingDialog,
-          buildContext: getBuildContext(), // Get BuildContext via callback
+          buildContext: getBuildContext, // Get BuildContext via callback
         );
       }
 
@@ -96,29 +95,37 @@ class DioHandler {
         // Pass other responses as-is
         success(response);
       }
+      if (showProcess) {
+        if (!getBuildContext.mounted) return;
+        hideLoadingDialog(
+            buildContext: getBuildContext); // Get BuildContext via callback
+      }
     } catch (e) {
       kDebugPrint("is error---------------2 $customErrorDialog");
       // Hide the loading dialog when 'showProcess' is true
-      if (showProcess == true) {
+      if (showProcess) {
+        if (!getBuildContext.mounted) return;
         hideLoadingDialog(
-            buildContext: getBuildContext()); // Get BuildContext via callback
+            buildContext: getBuildContext); // Get BuildContext via callback
       }
-      if (isAlertDialogs == true) {
+      if (isAlertDialogs) {
         // Display an error dialog for exceptions
         kDebugPrint("error---------------2");
-
+        if (!getBuildContext.mounted) return;
         apiAlertDialog(
           message: 'An error occurred: $e',
           customErrorDialog: customErrorDialog,
-          buildContext: getBuildContext(), // Get BuildContext via callback
+          buildContext: getBuildContext, // Get BuildContext via callback
         );
       }
       error(e);
     } finally {
-      if (showProcess == true) {
+      if (showProcess) {
         // Hide the loading dialog when 'showProcess' is true
-        hideLoadingDialog(
-            buildContext: getBuildContext()); // Get BuildContext via callback
+        if (getBuildContext.mounted) {
+          hideLoadingDialog(
+              buildContext: getBuildContext); // Get BuildContext via callback
+        }
       }
     }
   }

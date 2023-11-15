@@ -1,7 +1,7 @@
 name: dio_handler
 description: DioHandler provides utility functions and customization options to streamline API request handling in your Flutter applications.
-version: 0.0.1-beta-7
-homepage: https://arfaz.tech
+version: 0.0.1-beta-8
+homepage: https://linktr.ee/arfaz_860
 repository: https://github.com/Arfaz123/dio_handler.git
 
 environment:
@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  connectivity_plus: ^5.0.0
+  connectivity_plus: ^5.0.1
   dio: ^5.3.3
 
 dev_dependencies:
