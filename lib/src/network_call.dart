@@ -87,21 +87,30 @@ class DioHandler {
         kDebugPrint(
             'API request took ${stopwatch.elapsedMilliseconds} milliseconds');
       }
-
+      if (showProcess) {
+        if (!getBuildContext.mounted) return;
+        hideLoadingDialog(
+            buildContext: getBuildContext); // Get BuildContext via callback
+      }
       if (response.statusCode! >= 400) {
+        if (isAlertDialogs) {
+          // Display an error dialog for exceptions
+          kDebugPrint("error---------------*");
+          if (!getBuildContext.mounted) return;
+          apiAlertDialog(
+            message: 'An error occurred: $response',
+            customErrorDialog: customErrorDialog,
+            buildContext: getBuildContext, // Get BuildContext via callback
+          );
+        }
         // Handle errors, including HTTP status codes 400 and above
         error(response);
       } else {
         // Pass other responses as-is
         success(response);
       }
-      if (showProcess) {
-        if (!getBuildContext.mounted) return;
-        hideLoadingDialog(
-            buildContext: getBuildContext); // Get BuildContext via callback
-      }
     } catch (e) {
-      kDebugPrint("is error---------------2 $customErrorDialog");
+      kDebugPrint("is error---------------+ $customErrorDialog");
       // Hide the loading dialog when 'showProcess' is true
       if (showProcess) {
         if (!getBuildContext.mounted) return;
@@ -120,7 +129,7 @@ class DioHandler {
       }
       error(e);
     } finally {
-      if (showProcess) {
+      if (showProcess && !isAlertDialogs) {
         // Hide the loading dialog when 'showProcess' is true
         if (getBuildContext.mounted) {
           hideLoadingDialog(

@@ -111,6 +111,7 @@ If you have any questions, feel free to reach out:
 
 - Email: chhapawalaarfaz@gmail.com
 - GitHub: [@Arfaz123](https://github.com/Arfaz123)
+- LinkedIn: [@Arfaz Chhapawala](https://www.linkedin.com/in/arfaz-chhapawala-501357234)
 - YouTube: [@devfaaz](https://www.youtube.com/@devfaaz)
 
 ---
