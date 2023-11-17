@@ -1,4 +1,4 @@
-# Changelog 0.0.1-beta-9
+# Changelog 0.0.1
 
 All notable changes to this package will be documented in this file.
 
@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Bug or issue fixed in the unreleased version.
 
-## [0.0.1-beta-9] - 2023-11-16
+## [0.0.1] - 2023-11-17
 
 ### Added
 - Initial release of the package.
