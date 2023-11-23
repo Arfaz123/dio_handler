@@ -55,7 +55,7 @@ dynamic showLoadingDialog(
 /// // Displays an alert dialog with the error message
 /// ```
 dynamic apiAlertDialog({
-  required String message,
+  String? message,
   required buildContext,
   final dynamic customErrorDialog,
 }) {
@@ -72,7 +72,7 @@ dynamic apiAlertDialog({
         context: buildContext,
         builder: (context) {
           return AlertDialog(
-            content: Text(message),
+            content: Text(message ?? "This is an Alert Dialog"),
             actions: [
               TextButton(
                 onPressed: () {

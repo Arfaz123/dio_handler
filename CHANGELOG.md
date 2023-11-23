@@ -1,31 +1,48 @@
-# Changelog 0.0.1
+# Changelog 0.0.2
 
-All notable changes to this package will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [released]
-
-### Added
-- Feature or enhancement added in the unreleased version.
-
-### Changed
-- Change or improvement made in the unreleased version.
-
-### Deprecated
-- Deprecated feature or functionality in the unreleased version.
-
-### Removed
-- Removed feature or functionality in the unreleased version.
-
-### Fixed
-- Bug or issue fixed in the unreleased version.
+## [0.0.2] - 2023-11-23
+No changes.
 
 ## [0.0.1] - 2023-11-17
+First release built published.
 
-### Added
-- Initial release of the package.
+## [0.0.1-beta-9] - 2023-11-16
+**Features**
+* Improve error handling.
 
+## [0.0.1-beta-8] - 2023-11-15
+**Bug fixes**
+* Dialog context issue solve.
+  
+**Features**
+* Provide customize alert and loading dialogs.
 
+## [0.0.1-beta-7] - 2023-11-12
+No changes.
+
+## [0.0.1-beta-6] - 2023-10-11
+No changes.
+
+## [0.0.1-beta-5] - 2023-10-11
+No changes.
+
+## [0.0.1-beta-4] - 2023-10-11
+No changes.
+
+## [0.0.1-beta-3] - 2023-10-11
+**Features**
+* Provide more customization.
+
+## [0.0.1-beta-2] - 2023-10-10
+**Features**
+* API function implemented.
+
+## [0.0.1-beta-1] - 2023-10-08
+Initial release.
+
+**Features**
+* Simplified API calls with Dio.
+* Customizable error and loading dialogs.
+* Network connectivity check.
+* Callback time measurement.
 

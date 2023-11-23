@@ -3,7 +3,7 @@
 # DioHandler
 
 ![Pub Version](https://img.shields.io/pub/v/dio_handler)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![License](https://img.shields.io/badge/license-Apache-blue.svg)
 
 ---
 
@@ -131,7 +131,7 @@ Contributions to the `dio_handler` package are welcome! If you find a bug or wan
 
 ## License
 
-This package is released under the MIT License. See the [LICENSE](LICENSE) file for details.
+This package is released under the Apache License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
