@@ -62,6 +62,7 @@ Create an instance of `DioHandler` by providing a Dio instance and other optiona
 
 ```dart
 final DioHandler dioHandler = DioHandler(
+  getBuildContext: context, // Required: Provide context
   customErrorDialog: MyCustomErrorDialog(), // Optional: Provide a custom error dialog widget
   customLoadingDialog: MyCustomLoadingDialog(), // Optional: Provide a custom loading dialog widget
   isCheckNetworkConnectivity: true, // Optional: Enable network connectivity check

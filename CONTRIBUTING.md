@@ -44,6 +44,6 @@ Please follow the [Flutter style guide](https://flutter.dev/docs/development/too
 
 ## License
 
-By contributing to this repository, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+By contributing to this repository, you agree that your contributions will be licensed under the [Apache License](LICENSE).
 
 Thank you for your interest in contributing to DioHandler Flutter package! Your contributions are greatly appreciated.
